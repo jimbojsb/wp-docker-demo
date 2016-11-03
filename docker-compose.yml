@@ -1,0 +1,23 @@
+web:
+  build: .
+  ports:
+  - 10000:80
+  volumes:
+  - ~/projects/wp-docker-demo:/site
+  links:
+  - mysql
+  - memcached
+
+memcached:
+  image: memcached
+
+mysql:
+  image: mysql:5.6
+  ports:
+  - 10001:3306
+  command: mysqld --user=root --verbose --skip-sync-frm --innodb_flush_log_at_trx_commit=0 --innodb-support-xa=0 --bind-address=0.0.0.0 --query-cache-type=1
+  environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: site
+      MYSQL_PASSWORD: site
